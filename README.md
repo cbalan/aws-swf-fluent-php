@@ -22,7 +22,8 @@ Feedback is welcome.
 
 ## Getting Started
  1. **aws-sdk-php setup** - See http://aws.amazon.com/sdkforphp/ for more details
- 1. Add **aws-swf/fluent** to your **composer.json** require field. See *examples/composer.json*
+ 1. Install **aws-swf/fluent** - Using [Composer][] is the recommended way to install this library.
+    **aws-swf/fluent** is available via [Packagist][] under the [`aws-swf/fluent`][install-packagist] package.
  1. Add your workflows definitions in the same manner as QuickSimpleDomain listed below
  1. Create long running scripts for decision and activity workers
  1. Add startWorkflowExecution calls in your php application
@@ -76,9 +77,9 @@ class QuickSimpleDomain extends Aws\Swf\Fluent\Domain {
 
     public function evaluateStepOneResult($context, $decisionHint) {
         $lastEvent = $decisionHint->getLastEvent();
-        if ($lastEvent['eventType'] == Enum\EventType::ACTIVITY_TASK_FAILED) {
+        if ($lastEvent['eventType'] == Aws\Swf\Enum\EventType::ACTIVITY_TASK_FAILED) {
             $decisionHint->setItem($this->getActivity('stepFour'));
-            $decisionHint->setDecisionType(Enum\DecisionType::SCHEDULE_ACTIVITY_TASK);
+            $decisionHint->setDecisionType(Aws\Swf\Enum\DecisionType::SCHEDULE_ACTIVITY_TASK);
         }
     }
 
@@ -110,3 +111,9 @@ $domain->startWorkflowExecution('threeStepsZen', 5);
 
 ### More examples
 See examples folder for more details
+
+[composer]: http://getcomposer.org
+[packagist]: http://packagist.org
+
+[install-packagist]: https://packagist.org/packages/aws-swf/fluent
+
