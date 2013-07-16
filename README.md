@@ -59,7 +59,7 @@ class QuickSimpleDomain extends Aws_Swf_Domain {
 
     public function stepOne($context)   { /* do something on activity workers.*/ }
 
-    public function evaluateStepOneResult($context) {
+    public function evaluateStepOneResult($context, $decisionHint) {
         $lastEvent = $decisionHint->getLastEvent();
         if ($lastEvent['eventType'] == Enum\EventType::ACTIVITY_TASK_FAILED) {
             $decisionHint->setItem($this->getActivity('stepFour'));
