@@ -1,0 +1,5 @@
+{
+    "require": {
+        "aws-swf/fluent": "dev-master"
+    }
+}
