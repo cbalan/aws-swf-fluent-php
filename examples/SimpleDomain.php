@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../Aws/Swf/Domain.php';
-require_once __DIR__ . '/../tmp/aws-sdk/aws-autoloader.php';
+require_once __DIR__ . '/../src/Aws/Swf/Domain.php';
+require_once __DIR__ . '/path-to-aws-sdk/aws-autoloader.php';
 
 use Aws\Swf\Enum;
 
