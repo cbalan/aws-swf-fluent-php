@@ -28,7 +28,8 @@ class QuickSimpleDomain extends Aws_Swf_Domain {
          *  - if stepOne succeeded, execute stepTwo
          *  - if stepTwo succeeded, execute stepThree
          *
-         * On any unhandled exception, workflow execution will terminate with FAIL_WORKFLOW_EXECUTION decision.
+         * On any unhandled exception, workflow execution will terminate
+         * with FAIL_WORKFLOW_EXECUTION decision.
          * Decision tasks can catch/handle previous activity fail/success.
          */
         $this->addWorkflow('threeStepsZen')
