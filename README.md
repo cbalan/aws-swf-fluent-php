@@ -7,6 +7,19 @@ Please review all files before use.
 
 Feedback is welcome.
 
+## Features
+ * Fluent workflow definition
+ * Support for activity and decision workflow items
+
+## To be implemented / outstanding
+ * Timer support
+ * Signal support
+ * Activity/workflow timeouts support
+ * Child workflow support
+ * ContinueAsNew workflow support
+ * Workflow/activity cancelation support
+ * Improved domain/workflow/activity registration
+
 ## Getting Started
  1. **aws-sdk-php setup** - See http://aws.amazon.com/sdkforphp/ for more details
  1. Add aws-swf-fluent-php src folder to your lib folder
