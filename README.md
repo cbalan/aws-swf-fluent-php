@@ -1,7 +1,14 @@
 # aws-swf-fluent-php
 
-Glue code around aws-sdk-php to allow fluent workflows definition
+Glue code around aws-sdk-php to allow fluent workflows definition.
+Please note that the current state of this library is *not* production ready.
 
+## Getting Started
+ 1. *aws-sdk-php setup* - See (http://aws.amazon.com/sdkforphp/) for more details
+ 1. Add aws-swf-fluent-php src folder to your lib folder.
+ 1. Add your workflows definitions in the same manner as QuickSimpleDomain listed below
+ 1. Create start scripts for decision and activity workers.
+ 1. Add startWorkflowExecution calls in your php application.
 
 ## Quick Example
 
