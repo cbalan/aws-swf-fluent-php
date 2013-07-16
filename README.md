@@ -89,7 +89,7 @@ $domain = new QuickSimpleDomain();
 $domain->pollForActivityTask();
 ```
 
-// start a workflow execution.
+Start a workflow execution
 ```php
 $domain = new QuickSimpleDomain();
 $domain->startWorkflowExecution('threeStepsZen', 5);
