@@ -22,7 +22,7 @@ Feedback is welcome.
 
 ## Getting Started
  1. **aws-sdk-php setup** - See http://aws.amazon.com/sdkforphp/ for more details
- 1. Add aws-swf/fluent to your composer.json require field. See examples/SimpleDomain.php
+ 1. Add **aws-swf/fluent** to your **composer.json** require field. See *examples/composer.json*
  1. Add your workflows definitions in the same manner as QuickSimpleDomain listed below
  1. Create long running scripts for decision and activity workers
  1. Add startWorkflowExecution calls in your php application
