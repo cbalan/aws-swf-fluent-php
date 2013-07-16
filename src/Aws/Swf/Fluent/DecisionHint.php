@@ -1,9 +1,12 @@
 <?php
 
+namespace Aws\Swf\Fluent;
+
 /**
- * Class Aws_Swf_Decision_Hint
+ * Class DecisionHint
+ * @package Aws\Swf\Fluent
  */
-class Aws_Swf_Decision_Hint {
+class DecisionHint {
     /**
      * @var null
      */

@@ -1,9 +1,12 @@
 <?php
 
+namespace Aws\Swf\Fluent;
+
 /**
- * Class Aws_Swf_Activity_Context
+ * Class ActivityContext
+ * @package Aws\Swf\Fluent
  */
-class Aws_Swf_Activity_Context {
+class ActivityContext {
     /**
      * @var null
      */
