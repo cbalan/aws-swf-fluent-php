@@ -1,9 +1,12 @@
 <?php
 
+namespace Aws\Swf\Fluent;
+
 /**
- * Class Aws_Swf_Workflow_Task
+ * Class WorkflowTask
+ * @package Aws\Swf\Fluent
  */
-class Aws_Swf_Workflow_Task implements Aws_Swf_Workflow_Item {
+class WorkflowTask implements WorkflowItem {
 
     const ACTIVITY_TYPE = 'activity';
     const CHILD_WORKFLOW_TYPE = 'childWorkflow';

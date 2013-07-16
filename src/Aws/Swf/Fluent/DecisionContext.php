@@ -1,12 +1,15 @@
 <?php
 
+namespace Aws\Swf\Fluent;
+
 use Aws\Swf\Enum;
 
 /**
- * Class Aws_Swf_Decision_Context
+ * Class DecisionContext
+ * @package Aws\Swf\Fluent
  */
-class Aws_Swf_Decision_Context {
-    /* @var $workflow Aws_Swf_Workflow */
+class DecisionContext {
+    /* @var $workflow Workflow */
     protected $workflow = null;
     /**
      * @var array
@@ -38,14 +41,14 @@ class Aws_Swf_Decision_Context {
     }
 
     /**
-     * @param Aws_Swf_Workflow $workflow
+     * @param Workflow $workflow
      */
     public function setWorkflow($workflow) {
         $this->workflow = $workflow;
     }
 
     /**
-     * @return Aws_Swf_Workflow
+     * @return Workflow
      */
     public function getWorkflow() {
         if (is_null($this->workflow)) {
@@ -87,10 +90,10 @@ class Aws_Swf_Decision_Context {
      * @param $event
      */
     public function addEvent($event) {
-        if (!array_key_exists($event['type'], $this->eventsByType)) {
-            $this->eventsByType[$event['type']] = array();
+        if (!array_key_exists($event['eventType'], $this->eventsByType)) {
+            $this->eventsByType[$event['eventType']] = array();
         }
-        $this->eventsByType[$event['type']][$event['id']] = $event;
+        $this->eventsByType[$event['eventType']][$event['eventId']] = $event;
         $this->events[$event['eventId']] = $event;
     }
 
@@ -134,14 +137,14 @@ class Aws_Swf_Decision_Context {
                 break;
         }
 
-        $decisionHint = new Aws_Swf_Decision_Hint();
+        $decisionHint = new DecisionHint();
         $decisionHint->setLastEvent($lastEvent);
         if (!is_null($workflowDecisionHint)) {
             $decisionHint->setItem($workflowDecisionHint->getItem());
             $decisionHint->setDecisionType($workflowDecisionHint->getDecisionType());
 
             // if current workflow item is of type decision, the next
-            if ($workflowDecisionHint->getDecisionType() == Aws_Swf_Workflow::EXECUTE_DECISION_WORKFLOW_TASK_DECISION) {
+            if ($workflowDecisionHint->getDecisionType() == Workflow::EXECUTE_DECISION_WORKFLOW_TASK_DECISION) {
                 $this->handleDecisionWorkflowTask($decisionHint);
             }
         }

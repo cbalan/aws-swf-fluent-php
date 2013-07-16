@@ -1,11 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../src/Aws/Swf/Domain.php';
-require_once __DIR__ . '/path-to-aws-sdk/aws-autoloader.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-use Aws\Swf\Enum;
-
-class SimpleDomain extends Aws_Swf_Domain {
+class SimpleDomain extends Aws\Swf\Fluent\Domain {
 
     /**
      * Simple workflow domain configuration.
@@ -69,9 +66,9 @@ class SimpleDomain extends Aws_Swf_Domain {
      */
     public function evaluateStepOneResult($context, $decisionHint) {
         $lastEvent = $decisionHint->getLastEvent();
-        if ($lastEvent['eventType'] == Enum\EventType::ACTIVITY_TASK_FAILED) {
+        if ($lastEvent['eventType'] == Aws\Swf\Enum\EventType::ACTIVITY_TASK_FAILED) {
             $decisionHint->setItem($this->getActivity('stepFour'));
-            $decisionHint->setDecisionType(Enum\DecisionType::SCHEDULE_ACTIVITY_TASK);
+            $decisionHint->setDecisionType(Aws\Swf\Enum\DecisionType::SCHEDULE_ACTIVITY_TASK);
         }
     }
 

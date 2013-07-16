@@ -1,0 +1,23 @@
+{
+    "name": "aws-swf/fluent",
+    "homepage": "https://github.com/cbalan/aws-swf-fluent-php",
+    "description":"Glue code around aws-sdk-php to allow fluent workflows definition ",
+    "keywords":["aws","swf","fluent"],
+    "type":"library",
+    "license":"Apache-2.0",
+    "authors":[
+        {
+            "name":"Catalin Balan",
+            "homepage":"https://github.com/cbalan"
+        }
+    ],
+    "require": {
+        "aws/aws-sdk-php": "2.*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Aws\\Swf\\Fluent": "src/"
+        }
+    }
+}

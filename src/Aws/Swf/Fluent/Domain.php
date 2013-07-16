@@ -1,13 +1,12 @@
 <?php
 
-require_once __DIR__ . '/Workflow.php';
-require_once __DIR__ . '/Decision/Context.php';
-require_once __DIR__ . '/Activity/Context.php';
+namespace Aws\Swf\Fluent;
 
 /**
- * Class Aws_Swf_Domain
+ * Class Domain
+ * @package Aws\Swf\Fluent
  */
-class Aws_Swf_Domain {
+class Domain {
     /* @var $swfClient \Aws\Swf\SwfClient */
     protected $domainName = null;
     /**
@@ -216,10 +215,10 @@ class Aws_Swf_Domain {
     /**
      * @param $workflowName
      * @param array $options
-     * @return Aws_Swf_Workflow
+     * @return Workflow
      */
     public function addWorkflow($workflowName, $options = array()) {
-        $workflow = new Aws_Swf_Workflow($workflowName, $options);
+        $workflow = new Workflow($workflowName, $options);
         $this->workflows[$workflowName] = $workflow;
         return $workflow;
     }
@@ -327,7 +326,7 @@ class Aws_Swf_Domain {
         $activityType = $activityTaskData['activityType'];
         $activity = $this->getActivity($activityType['name']);
 
-        $activityContext = new Aws_Swf_Activity_Context();
+        $activityContext = new ActivityContext();
         $activityContext->setDomain($this);
         $activityContext->setActivityTaskData($activityTaskData);
         $activityContext->setInput($activityTaskData['input']);
@@ -351,10 +350,10 @@ class Aws_Swf_Domain {
     protected function processDecisionTask($decisionTaskData) {
         $workflowType = $decisionTaskData['workflowType'];
         $workflow = $this->getWorkflow($workflowType['name']);
-        $decisionHint = new Aws_Swf_Decision_Hint();
+        $decisionHint = new DecisionHint();
 
         try {
-            $decisionContext = new Aws_Swf_Decision_Context();
+            $decisionContext = new DecisionContext();
             $decisionContext->setDomain($this);
             $decisionContext->setWorkflow($workflow);
             $decisionContext->loadReversedEventHistory($decisionTaskData['events']);
@@ -369,7 +368,7 @@ class Aws_Swf_Domain {
     }
 
     /**
-     * @param $decisionHint Aws_Swf_Decision_Hint
+     * @param $decisionHint DecisionHint
      * @return array
      */
     protected function getDecisions($decisionHint) {
@@ -440,7 +439,7 @@ class Aws_Swf_Domain {
     public function getAllActivities() {
         $activities = array();
         foreach ($this->getWorkflows() as $workflow) {
-            foreach ($workflow->getTasksByType(Aws_Swf_Workflow_Task::ACTIVITY_TYPE) as $activity) {
+            foreach ($workflow->getTasksByType(WorkflowTask::ACTIVITY_TYPE) as $activity) {
                 $activities[$activity->getName()] = $activity;
             }
         }

@@ -1,15 +1,14 @@
 <?php
 
-require_once __DIR__ . '/Workflow/Item.php';
-require_once __DIR__ . '/Workflow/Task.php';
-require_once __DIR__ . '/Decision/Hint.php';
+namespace Aws\Swf\Fluent;
 
 use Aws\Swf\Enum;
 
 /**
- * Class Aws_Swf_Workflow
+ * Class Workflow
+ * @package Aws\Swf\Fluent
  */
-class Aws_Swf_Workflow implements Aws_Swf_Workflow_Item {
+class Workflow implements WorkflowItem {
 
     const EXECUTE_DECISION_WORKFLOW_TASK_DECISION = 'executeDecisionWorkflowTaskDecision';
 
@@ -114,18 +113,18 @@ class Aws_Swf_Workflow implements Aws_Swf_Workflow_Item {
      * @return $this
      */
     public function to($uri, $options = array()) {
-        $task = new Aws_Swf_Workflow_Task($uri, $options);
+        $task = new WorkflowTask($uri, $options);
 
         switch ($task->getType()) {
-            case Aws_Swf_Workflow_Task::ACTIVITY_TYPE:
+            case WorkflowTask::ACTIVITY_TYPE:
                 $this->toActivity($task);
                 break;
 
-            case Aws_Swf_Workflow_Task::CHILD_WORKFLOW_TYPE:
+            case WorkflowTask::CHILD_WORKFLOW_TYPE:
                 $this->toChildWorkflow($task);
                 break;
 
-            case Aws_Swf_Workflow_Task::DECISION_TYPE:
+            case WorkflowTask::DECISION_TYPE:
                 $this->toDecision($task);
         }
 
@@ -159,7 +158,7 @@ class Aws_Swf_Workflow implements Aws_Swf_Workflow_Item {
      * @param array $options
      */
     public function registerTask($uri, $options = array()) {
-        $task = new Aws_Swf_Workflow_Task($uri, $options);
+        $task = new WorkflowTask($uri, $options);
 
         // on activity complete, complete workflow execution, unless there was another activity added
         $this->addTransition(
@@ -227,16 +226,16 @@ class Aws_Swf_Workflow implements Aws_Swf_Workflow_Item {
     }
 
     /**
-     * @param Aws_Swf_Workflow_Item $sourceItem
+     * @param WorkflowItem $sourceItem
      * @param $stateHint
-     * @param Aws_Swf_Workflow_Item $targetItem
+     * @param WorkflowItem $targetItem
      * @param $decisionHint
      * @return $this
      */
-    protected function addTransition(Aws_Swf_Workflow_Item $sourceItem, $stateHint, Aws_Swf_Workflow_Item $targetItem, $decisionType) {
+    protected function addTransition(WorkflowItem $sourceItem, $stateHint, WorkflowItem $targetItem, $decisionType) {
         $stateId = $this->getStateId($sourceItem, $stateHint);
 
-        $decisionHint = new Aws_Swf_Decision_Hint();
+        $decisionHint = new DecisionHint();
         $decisionHint->setItem($targetItem);
         $decisionHint->setDecisionType($decisionType);
 
@@ -252,11 +251,11 @@ class Aws_Swf_Workflow implements Aws_Swf_Workflow_Item {
     }
 
     /**
-     * @param Aws_Swf_Workflow_Item $item
+     * @param WorkflowItem $item
      * @param $state
      * @return string
      */
-    public function getStateId(Aws_Swf_Workflow_Item $item, $state) {
+    public function getStateId(WorkflowItem $item, $state) {
         $result = null;
         switch ($state) {
             case Enum\EventType::WORKFLOW_EXECUTION_STARTED:
@@ -270,11 +269,11 @@ class Aws_Swf_Workflow implements Aws_Swf_Workflow_Item {
     }
 
     /**
-     * @param Aws_Swf_Workflow_Item $item
+     * @param WorkflowItem $item
      * @param $state
      * @return null
      */
-    public function getDecisionHint(Aws_Swf_Workflow_Item $item, $state) {
+    public function getDecisionHint(WorkflowItem $item, $state) {
         $result = null;
         $stateId = $this->getStateId($item, $state);
         if (array_key_exists($stateId, $this->transitions)) {
