@@ -1,7 +1,9 @@
 # aws-swf-fluent-php
 
 Glue code around aws-sdk-php to allow fluent workflows definition.
-Please note that the current state of this library is *not* production ready.
+
+Please note that the current state of this library is **not** production ready.
+Please review all files before use. Waiting for feedback.
 
 ## Getting Started
  1. **aws-sdk-php setup** - See http://aws.amazon.com/sdkforphp/ for more details
