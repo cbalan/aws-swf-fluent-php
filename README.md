@@ -19,6 +19,14 @@ class QuickSimpleDomain extends Aws_Swf_Domain {
      *  - actions using workflow's 'to'/registerTask method
      */
     protected function configure() {
+        // set swf client
+        $domain->setSwfClient(Aws\Swf\SwfClient::factory(array(
+            'key' => 'AWS key',
+            'secret' => 'AWS secret key',
+            'region' => 'us-east-1'
+        )));
+
+        // set domain name
         $this->setDomainName('threeStepsZenDomain');
 
         /**
@@ -56,24 +64,25 @@ class QuickSimpleDomain extends Aws_Swf_Domain {
 
     public function stepFour($context)  { /* do something on activity workers.*/ }
 }
+```
 
-// $domain = new QuickSimpleDomain();
-// set aws swf client
-// $domain->setSwfClient(Aws\Swf\SwfClient::factory(array(
-//    'key' => 'AWS key',
-//    'secret' => 'AWS secret key',
-//    'region' => 'us-east-1'
-//)));
+decision-worker.php
+```php
+$domain = new QuickSimpleDomain();
+$domain->pollForDecisionTask();
+```
 
-// start decision worker
-// $domain->pollForDecisionTask();
+activity-worker.php
+```php
+$domain = new QuickSimpleDomain();
+$domain->pollForActivityTask();
+```
 
-// start activity worker
-// $domain->pollForActivityTask();
-
-// start a workflow execution
-// $domain->startWorkflowExecution('threeStepsZen', 5, true);
+// start a workflow execution.
+```php
+$domain = new QuickSimpleDomain();
+$domain->startWorkflowExecution('threeStepsZen', 5);
 ```
 
 ### More examples
-* See examples folder for more details
+See examples folder for more details
