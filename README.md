@@ -21,7 +21,7 @@ Feedback is welcome.
  * Improved domain/workflow/activity registration
 
 ## Getting Started
- 1. **aws-sdk-php setup** - See http://aws.amazon.com/sdkforphp/ for more details
+ 1. Sign up for AWS - http://docs.aws.amazon.com/aws-sdk-php-2/guide/latest/awssignup.html
  1. Install **aws-swf/fluent** - Using [Composer][] is the recommended way to install this library.
     **aws-swf/fluent** is available via [Packagist][] under the [`aws-swf/fluent`][install-packagist] package.
  1. Add your workflows definitions in the same manner as QuickSimpleDomain listed below
