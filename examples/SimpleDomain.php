@@ -50,7 +50,7 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
         $input = $context->getInput();
 
         $context->recordActivityTaskHeartbeat();
-        print('step1:');
+        print($this->getWorkerIdentity().'#step1:');
         var_dump($input);
 
         return $input * 10;
@@ -77,7 +77,7 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
     public function stepTwo($context) {
         $input = $context->getInput();
 
-        print('step2:');
+        print($this->getWorkerIdentity().'#step2:');
         var_dump($input);
 
         return $input * 20;
@@ -91,7 +91,7 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
     public function stepThree($context) {
         $input = $context->getInput();
 
-        print('step3:');
+        print($this->getWorkerIdentity().'#step3:');
         var_dump($input);
 
         return $input * 30;
@@ -105,7 +105,7 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
     public function stepFour($context) {
         $input = $context->getInput();
 
-        print('step4:');
+        print($this->getWorkerIdentity().'#step4:');
         var_dump($input);
 
         return $input * 30;

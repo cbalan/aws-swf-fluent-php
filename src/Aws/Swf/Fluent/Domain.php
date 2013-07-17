@@ -41,6 +41,15 @@ class Domain {
     protected $cachedActivities = null;
 
     /**
+     * @var string
+     */
+    protected $deciderIdentity = 'decider';
+    /**
+     * @var string
+     */
+    protected $workerIdentity = 'worker';
+
+    /**
      *
      */
     protected function configure() {
@@ -239,7 +248,14 @@ class Domain {
      * @return string
      */
     public function getDeciderIdentity() {
-        return 'my-decider';
+        return $this->deciderIdentity;
+    }
+
+    /**
+     * @return string
+     */
+    public function setDeciderIdentity($deciderIdentity) {
+        $this->deciderIdentity = $deciderIdentity;
     }
 
     /**
@@ -430,7 +446,14 @@ class Domain {
      *
      */
     public function getWorkerIdentity() {
-        return 'my worker';
+        return $this->workerIdentity;
+    }
+
+    /**
+     *
+     */
+    public function setWorkerIdentity($workerIdentity) {
+        $this->workerIdentity = $workerIdentity;
     }
 
     /**
