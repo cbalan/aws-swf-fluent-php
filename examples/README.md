@@ -1,7 +1,7 @@
 # Three steps workflow with decision task
 
 ## Running three steps workflow example
- 1. Install **composer.phar** unless is already installed: `curl -sS https://getcomposer.org/installer | php`
+ 1. Install [Composer][] unless is already installed: `curl -sS https://getcomposer.org/installer | php`
  1. Install dependencies. Under current folder execute: `php composer.phar install`
  1. Update aws-config.json with your AWS credentials
  1. Start decider worker in a new terminal: `php SimpleDomainDecider.php`
@@ -11,3 +11,5 @@
  1. Start workflow execution in a new terminal: `php SimpleDomainStart.php`.
     Feel free to repeat this step a couple of times
  1. Go to AWS console a look at threeStepsZenDomain workflow executions
+
+[composer]: http://getcomposer.org
