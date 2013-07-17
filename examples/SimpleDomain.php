@@ -19,11 +19,8 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
          * SWF client configuration can be done also outside of this method, prior to
          * startWorkflowExecution, pollForDecisionTask or pollForActivityTask calls.
          */
-        $this->setSwfClient(Aws\Swf\SwfClient::factory(array(
-            'key' => 'AWS key',
-            'secret' => 'AWS secret key',
-            'region' => 'us-east-1'
-        )));
+        $aws = Aws\Common\Aws::factory(__DIR__ . '/aws-config.json');
+        $this->setSwfClient($aws->get('swf'));
 
         /**
          * threeStepsZen workflow :

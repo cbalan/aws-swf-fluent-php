@@ -1,0 +1,14 @@
+{
+    "includes": [
+        "_aws"
+    ],
+    "services": {
+        "default_settings": {
+            "params": {
+                "key": "AWS key",
+                "secret": "AWS secret key",
+                "region": "us-east-1"
+            }
+        }
+    }
+}
