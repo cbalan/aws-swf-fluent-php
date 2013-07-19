@@ -71,6 +71,12 @@ class QuickSimpleDomain extends Aws\Swf\Fluent\Domain {
             ->to('activity://stepTwo')
             ->to('activity://stepThree')
             ->registerTask('activity://stepFour', array('comment' => 'Optional step 4'));
+
+        $this->addWorkflow('secondWorkflow')
+            ->to('activity://stepBeforeChildWorkflow')
+            ->to('childWorkflow://threeStepsZen')
+            ->to('activity://stepAfterChildWorkflow');
+
     }
 
     public function stepOne($context)   { /* do something on activity workers.*/ }
@@ -88,6 +94,10 @@ class QuickSimpleDomain extends Aws\Swf\Fluent\Domain {
     public function stepThree($context) { /* do something on activity workers.*/ }
 
     public function stepFour($context)  { /* do something on activity workers.*/ }
+
+    public function stepBeforeChildWorkflow($context)  { /* do something on activity workers.*/ }
+
+    public function stepAfterChildWorkflow($context)  { /* do something on activity workers.*/ }
 }
 ```
 
