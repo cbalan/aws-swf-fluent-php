@@ -35,6 +35,14 @@ class Workflow implements WorkflowItem {
         Enum\EventType::CHILD_WORKFLOW_EXECUTION_FAILED => self::WORKFLOW_ITEM_FAILED,
     );
 
+    protected $knownStates = array(
+        Enum\EventType::WORKFLOW_EXECUTION_STARTED,
+        Enum\EventType::ACTIVITY_TASK_COMPLETED,
+        Enum\EventType::ACTIVITY_TASK_FAILED,
+        Enum\EventType::CHILD_WORKFLOW_EXECUTION_COMPLETED,
+        Enum\EventType::CHILD_WORKFLOW_EXECUTION_FAILED,
+    );
+
     /**
      * @var array
      */
@@ -208,7 +216,7 @@ class Workflow implements WorkflowItem {
     protected function toActivity($task) {
         if (is_null($this->lastTask)) {
             $this->addTransition(
-                $this, self::WORKFLOW_ITEM_COMPLETED,
+                $this, Enum\EventType::WORKFLOW_EXECUTION_STARTED,
                 $task, Enum\DecisionType::SCHEDULE_ACTIVITY_TASK);
         }
         else {
@@ -230,6 +238,7 @@ class Workflow implements WorkflowItem {
     }
 
     /**
+     * @todo: Add error handling for decision tasks
      * @param $task
      */
     protected function toDecision($task) {
@@ -251,9 +260,27 @@ class Workflow implements WorkflowItem {
      * @throws Exception
      */
     protected function toChildWorkflow($task) {
-        $this->toActivity($task);
+        if (is_null($this->lastTask)) {
+            $this->addTransition(
+                $this, Enum\EventType::WORKFLOW_EXECUTION_STARTED,
+                $task, Enum\DecisionType::START_CHILD_WORKFLOW_EXECUTION);
+        }
+        else {
+            // schedule current task after previous task complete
+            $this->addTransition(
+                $this->lastTask, self::WORKFLOW_ITEM_COMPLETED,
+                $task, Enum\DecisionType::START_CHILD_WORKFLOW_EXECUTION);
+        }
 
+        // on activity complete, complete workflow execution, unless there was another activity added
+        $this->addTransition(
+            $task, self::WORKFLOW_ITEM_COMPLETED,
+            $this, Enum\DecisionType::COMPLETE_WORKFLOW_EXECUTION);
 
+        // on activity fail, fail workflow
+        $this->addTransition(
+            $task, self::WORKFLOW_ITEM_FAILED,
+            $this, Enum\DecisionType::FAIL_WORKFLOW_EXECUTION);
     }
 
     /**
@@ -336,14 +363,12 @@ class Workflow implements WorkflowItem {
     }
 
     /**
+     * Event types that could trigger a workflow transition
+     *
      * @return array
      */
     public function getKnownStates() {
-        return array(
-            Enum\EventType::WORKFLOW_EXECUTION_STARTED,
-            Enum\EventType::ACTIVITY_TASK_COMPLETED,
-            Enum\EventType::ACTIVITY_TASK_FAILED
-        );
+        return $this->knownStates;
     }
 
     /**
