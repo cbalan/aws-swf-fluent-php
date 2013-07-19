@@ -38,6 +38,10 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
             ->to('activity://stepTwo')
             ->to('activity://stepThree')
             ->registerTask('activity://stepFour', array('comment' => 'Optional step 4'));
+
+        $this->addWorkflow('secondWorkflow')
+            ->to('activity://stepOnePrim')
+            ->to('childWorkflow://threeStepsZen');
     }
 
     /**
@@ -109,5 +113,12 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
         var_dump($input);
 
         return $input * 30;
+    }
+
+    public function stepOnePrim($context) {
+        $input = $context->getInput();
+
+        print($this->getWorkerIdentity().'#stepOnePrim:');
+        var_dump($input);
     }
 }

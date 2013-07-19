@@ -10,7 +10,30 @@ use Aws\Swf\Enum;
  */
 class Workflow implements WorkflowItem {
 
+    /**
+     *
+     */
     const EXECUTE_DECISION_WORKFLOW_TASK_DECISION = 'executeDecisionWorkflowTaskDecision';
+
+    /**
+     *
+     */
+    const WORKFLOW_ITEM_COMPLETED = 'workflowItemCompleted';
+    /**
+     *
+     */
+    const WORKFLOW_ITEM_FAILED = 'workflowItemFailed';
+
+    /**
+     * @var array
+     */
+    protected $eventTypeAliases = array(
+        Enum\EventType::WORKFLOW_EXECUTION_STARTED => self::WORKFLOW_ITEM_COMPLETED,
+        Enum\EventType::ACTIVITY_TASK_COMPLETED => self::WORKFLOW_ITEM_COMPLETED,
+        Enum\EventType::ACTIVITY_TASK_FAILED => self::WORKFLOW_ITEM_FAILED,
+        Enum\EventType::CHILD_WORKFLOW_EXECUTION_COMPLETED => self::WORKFLOW_ITEM_COMPLETED,
+        Enum\EventType::CHILD_WORKFLOW_EXECUTION_FAILED => self::WORKFLOW_ITEM_FAILED,
+    );
 
     /**
      * @var array
@@ -45,6 +68,10 @@ class Workflow implements WorkflowItem {
      */
     protected $version = '1.0';
 
+    /**
+     * @param $workflowName
+     * @param $options
+     */
     public function __construct($workflowName, $options) {
         $this->setName($workflowName);
         $this->setOptions($options);
@@ -162,12 +189,12 @@ class Workflow implements WorkflowItem {
 
         // on activity complete, complete workflow execution, unless there was another activity added
         $this->addTransition(
-            $task, Enum\EventType::ACTIVITY_TASK_COMPLETED,
+            $task, self::WORKFLOW_ITEM_COMPLETED,
             $this, Enum\DecisionType::COMPLETE_WORKFLOW_EXECUTION);
 
         // on activity fail, fail workflow
         $this->addTransition(
-            $task, Enum\EventType::ACTIVITY_TASK_FAILED,
+            $task, self::WORKFLOW_ITEM_FAILED,
             $this, Enum\DecisionType::FAIL_WORKFLOW_EXECUTION);
 
         $this->addTask($task);
@@ -181,24 +208,24 @@ class Workflow implements WorkflowItem {
     protected function toActivity($task) {
         if (is_null($this->lastTask)) {
             $this->addTransition(
-                $this, Enum\EventType::WORKFLOW_EXECUTION_STARTED,
+                $this, self::WORKFLOW_ITEM_COMPLETED,
                 $task, Enum\DecisionType::SCHEDULE_ACTIVITY_TASK);
         }
         else {
             // schedule current task after previous task complete
             $this->addTransition(
-                $this->lastTask, Enum\EventType::ACTIVITY_TASK_COMPLETED,
+                $this->lastTask, self::WORKFLOW_ITEM_COMPLETED,
                 $task, Enum\DecisionType::SCHEDULE_ACTIVITY_TASK);
         }
 
         // on activity complete, complete workflow execution, unless there was another activity added
         $this->addTransition(
-            $task, Enum\EventType::ACTIVITY_TASK_COMPLETED,
+            $task, self::WORKFLOW_ITEM_COMPLETED,
             $this, Enum\DecisionType::COMPLETE_WORKFLOW_EXECUTION);
 
         // on activity fail, fail workflow
         $this->addTransition(
-            $task, Enum\EventType::ACTIVITY_TASK_FAILED,
+            $task, self::WORKFLOW_ITEM_FAILED,
             $this, Enum\DecisionType::FAIL_WORKFLOW_EXECUTION);
     }
 
@@ -208,12 +235,14 @@ class Workflow implements WorkflowItem {
     protected function toDecision($task) {
         $this->toActivity($task);
 
+        // on last task complete, execute decision workflow task
         $this->addTransition(
-            $this->lastTask, Enum\EventType::ACTIVITY_TASK_COMPLETED,
+            $this->lastTask, self::WORKFLOW_ITEM_COMPLETED,
             $task, self::EXECUTE_DECISION_WORKFLOW_TASK_DECISION);
 
+        // on last task fail, execute decision workflow task
         $this->addTransition(
-            $this->lastTask, Enum\EventType::ACTIVITY_TASK_FAILED,
+            $this->lastTask, self::WORKFLOW_ITEM_FAILED,
             $task, self::EXECUTE_DECISION_WORKFLOW_TASK_DECISION);
     }
 
@@ -222,7 +251,9 @@ class Workflow implements WorkflowItem {
      * @throws Exception
      */
     protected function toChildWorkflow($task) {
-        throw new Exception('Not supported');
+        $this->toActivity($task);
+
+
     }
 
     /**
@@ -278,6 +309,28 @@ class Workflow implements WorkflowItem {
         $stateId = $this->getStateId($item, $state);
         if (array_key_exists($stateId, $this->transitions)) {
             $result = $this->transitions[$stateId];
+        }
+        else {
+            $stateByAlias = $this->getStateByAlias($state);
+            if ($stateByAlias) {
+                $stateByAliasId = $this->getStateId($item, $stateByAlias);
+                if (array_key_exists($stateByAliasId, $this->transitions)) {
+                    $result = $this->transitions[$stateByAliasId];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $stateAlias
+     * @return mixed
+     */
+    public function getStateByAlias($stateAlias) {
+        $result = null;
+        if (array_key_exists($stateAlias, $this->eventTypeAliases)) {
+            $result = $this->eventTypeAliases[$stateAlias];
         }
         return $result;
     }
