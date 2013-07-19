@@ -395,29 +395,50 @@ class Domain {
         $decisions = array();
 
         switch ($decisionType) {
+            case Workflow::NOOP:
+                // no operation.
+                break;
+
             case \Aws\Swf\Enum\DecisionType::SCHEDULE_ACTIVITY_TASK:
                 $decisions[] = array(
-                    "decisionType" => "ScheduleActivityTask",
-                    "scheduleActivityTaskDecisionAttributes" => array(
+                    'decisionType' => \Aws\Swf\Enum\DecisionType::SCHEDULE_ACTIVITY_TASK,
+                    'scheduleActivityTaskDecisionAttributes' => array(
                         'control' => $item->getId(),
-                        "activityType" => array(
-                            "name" => $item->getName(),
-                            "version" => $item->getVersion()
+                        'activityType' => array(
+                            'name' => $item->getName(),
+                            'version' => $item->getVersion()
                         ),
-                        "activityId" => $item->getName() . time(),
-                        "input" => $lastEventResult,
-                        "scheduleToCloseTimeout" => "900",
-                        "taskList" => array("name" => $this->getTaskList()),
-                        "scheduleToStartTimeout" => "300",
-                        "startToCloseTimeout" => "600",
-                        "heartbeatTimeout" => "120")
+                        'activityId' => $item->getName() . time(),
+                        'input' => $lastEventResult,
+                        'scheduleToCloseTimeout' => '900',
+                        'taskList' => array('name' => $this->getTaskList()),
+                        'scheduleToStartTimeout' => '300',
+                        'startToCloseTimeout' => '600',
+                        'heartbeatTimeout' => '120')
                 );
+                break;
+
+            case \Aws\Swf\Enum\DecisionType::START_CHILD_WORKFLOW_EXECUTION:
+                $decisions[] = array(
+                    'decisionType' => \Aws\Swf\Enum\DecisionType::START_CHILD_WORKFLOW_EXECUTION,
+                    'startChildWorkflowExecutionDecisionAttributes' => array(
+                        'childPolicy' => 'TERMINATE',
+                        'control' => $item->getId(),
+                        'executionStartToCloseTimeout' => '1800',
+                        'input' => $lastEventResult,
+                        'taskList' => array('name' => $this->getTaskList()),
+                        "taskStartToCloseTimeout" => "600",
+                        "workflowId" => microtime(),
+                        "workflowType" => array(
+                            "name" => $item->getName(),
+                            "version" => $item->getVersion())
+                    ));
                 break;
 
             case \Aws\Swf\Enum\DecisionType::COMPLETE_WORKFLOW_EXECUTION:
                 $decisions[] = array(
-                    "decisionType" => "CompleteWorkflowExecution",
-                    "completeWorkflowExecutionDecisionAttributes" => array(
+                    'decisionType' => \Aws\Swf\Enum\DecisionType::COMPLETE_WORKFLOW_EXECUTION,
+                    'completeWorkflowExecutionDecisionAttributes' => array(
                         'result' => $lastEventResult));
                 break;
 
@@ -432,8 +453,8 @@ class Domain {
                 }
 
                 $decisions = array(array(
-                    "decisionType" => "FailWorkflowExecution",
-                    "failWorkflowExecutionDecisionAttributes" => array(
+                    'decisionType' => \Aws\Swf\Enum\DecisionType::FAIL_WORKFLOW_EXECUTION,
+                    'failWorkflowExecutionDecisionAttributes' => array(
                         'details' => $details,
                         'reason' => $reason)));
                 break;

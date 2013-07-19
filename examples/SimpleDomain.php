@@ -2,6 +2,9 @@
 
 require_once 'vendor/autoload.php';
 
+/**
+ * Class SimpleDomain
+ */
 class SimpleDomain extends Aws\Swf\Fluent\Domain {
 
     /**
@@ -38,6 +41,11 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
             ->to('activity://stepTwo')
             ->to('activity://stepThree')
             ->registerTask('activity://stepFour', array('comment' => 'Optional step 4'));
+
+        $this->addWorkflow('secondWorkflow')
+            ->to('activity://stepBeforeChildWorkflow')
+            ->to('childWorkflow://threeStepsZen')
+            ->to('activity://stepAfterChildWorkflow');
     }
 
     /**
@@ -109,5 +117,27 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
         var_dump($input);
 
         return $input * 30;
+    }
+
+    /**
+     * @param $context
+     */
+    public function stepBeforeChildWorkflow($context) {
+        $input = $context->getInput();
+
+        print($this->getWorkerIdentity().__METHOD__);
+        var_dump($input);
+        return $input;
+    }
+
+    /**
+     * @param $context
+     */
+    public function stepAfterChildWorkflow($context) {
+        $input = $context->getInput();
+
+        print($this->getWorkerIdentity().__METHOD__);
+        var_dump($input);
+        return $input;
     }
 }

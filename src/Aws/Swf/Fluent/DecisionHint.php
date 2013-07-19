@@ -89,6 +89,9 @@ class DecisionHint {
         $event = $this->getLastEvent();
         if ($event) {
             switch ($event['eventType']) {
+                case \Aws\Swf\Enum\EventType::CHILD_WORKFLOW_EXECUTION_COMPLETED:
+                    $result = $event['childWorkflowExecutionCompletedEventAttributes']['result'];
+                    break;
                 case \Aws\Swf\Enum\EventType::ACTIVITY_TASK_COMPLETED:
                     $result = $event['activityTaskCompletedEventAttributes']['result'];
                     break;
