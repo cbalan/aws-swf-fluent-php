@@ -135,6 +135,27 @@ class DecisionContext {
                 $item = $this->getWorkflow()->getTask($taskId);
                 $workflowDecisionHint = $this->getWorkflow()->getDecisionHint($item, Enum\EventType::ACTIVITY_TASK_FAILED);
                 break;
+
+            case Enum\EventType::CHILD_WORKFLOW_EXECUTION_COMPLETED:
+                $scheduledEvent = $this->getEvent($lastEvent['childWorkflowExecutionCompletedEventAttributes']['initiatedEventId']);
+                $taskId = $scheduledEvent['startChildWorkflowExecutionInitiatedEventAttributes']['control'];
+                $item = $this->getWorkflow()->getTask($taskId);
+                $workflowDecisionHint = $this->getWorkflow()->getDecisionHint($item, Enum\EventType::ACTIVITY_TASK_COMPLETED);
+                break;
+
+            case Enum\EventType::CHILD_WORKFLOW_EXECUTION_FAILED:
+                $scheduledEvent = $this->getEvent($lastEvent['childWorkflowExecutionFailedEventAttributes']['initiatedEventId']);
+                $taskId = $scheduledEvent['startChildWorkflowExecutionInitiatedEventAttributes']['control'];
+                $item = $this->getWorkflow()->getTask($taskId);
+                $workflowDecisionHint = $this->getWorkflow()->getDecisionHint($item, Enum\EventType::ACTIVITY_TASK_FAILED);
+                break;
+
+            case Enum\EventType::START_CHILD_WORKFLOW_EXECUTION_INITIATED:
+            case Enum\EventType::ACTIVITY_TASK_SCHEDULED:
+                $workflowDecisionHint = new DecisionHint();
+                $workflowDecisionHint->setDecisionType(Workflow::NOOP);
+                $workflowDecisionHint->setItem($this->getWorkflow());
+                break;
         }
 
         $decisionHint = new DecisionHint();
@@ -150,7 +171,7 @@ class DecisionContext {
         }
         else {
             // unable to determine next decision. Fail workflow execution
-            $decisionHint->setLastException(new Exception('Unable to determine next decision'));
+            $decisionHint->setLastException(new \Exception('Unable to determine next decision'));
             $decisionHint->setItem($this->getWorkflow());
             $decisionHint->setDecisionType(Enum\DecisionType::FAIL_WORKFLOW_EXECUTION);
         }

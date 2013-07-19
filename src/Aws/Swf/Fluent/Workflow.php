@@ -9,20 +9,11 @@ use Aws\Swf\Enum;
  * @package Aws\Swf\Fluent
  */
 class Workflow implements WorkflowItem {
-
-    /**
-     *
-     */
     const EXECUTE_DECISION_WORKFLOW_TASK_DECISION = 'executeDecisionWorkflowTaskDecision';
-
-    /**
-     *
-     */
     const WORKFLOW_ITEM_COMPLETED = 'workflowItemCompleted';
-    /**
-     *
-     */
+    const WORKFLOW_ITEM_STARTED = 'workflowItemStarted';
     const WORKFLOW_ITEM_FAILED = 'workflowItemFailed';
+    const NOOP = 'NOOP';
 
     /**
      * @var array
@@ -37,8 +28,10 @@ class Workflow implements WorkflowItem {
 
     protected $knownStates = array(
         Enum\EventType::WORKFLOW_EXECUTION_STARTED,
+        Enum\EventType::ACTIVITY_TASK_SCHEDULED,
         Enum\EventType::ACTIVITY_TASK_COMPLETED,
         Enum\EventType::ACTIVITY_TASK_FAILED,
+        Enum\EventType::START_CHILD_WORKFLOW_EXECUTION_INITIATED,
         Enum\EventType::CHILD_WORKFLOW_EXECUTION_COMPLETED,
         Enum\EventType::CHILD_WORKFLOW_EXECUTION_FAILED,
     );

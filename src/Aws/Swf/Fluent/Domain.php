@@ -395,6 +395,10 @@ class Domain {
         $decisions = array();
 
         switch ($decisionType) {
+            case Workflow::NOOP:
+                // no operation.
+                break;
+
             case \Aws\Swf\Enum\DecisionType::SCHEDULE_ACTIVITY_TASK:
                 $decisions[] = array(
                     'decisionType' => \Aws\Swf\Enum\DecisionType::SCHEDULE_ACTIVITY_TASK,
@@ -419,7 +423,7 @@ class Domain {
                     'decisionType' => \Aws\Swf\Enum\DecisionType::START_CHILD_WORKFLOW_EXECUTION,
                     'startChildWorkflowExecutionDecisionAttributes' => array(
                         'childPolicy' => 'TERMINATE',
-                        'control' => 'string',
+                        'control' => $item->getId(),
                         'executionStartToCloseTimeout' => '1800',
                         'input' => $lastEventResult,
                         'taskList' => array('name' => $this->getTaskList()),

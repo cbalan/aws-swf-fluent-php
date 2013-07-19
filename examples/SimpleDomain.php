@@ -127,6 +127,7 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
 
         print($this->getWorkerIdentity().__METHOD__);
         var_dump($input);
+        return $input;
     }
 
     /**
@@ -137,5 +138,6 @@ class SimpleDomain extends Aws\Swf\Fluent\Domain {
 
         print($this->getWorkerIdentity().__METHOD__);
         var_dump($input);
+        return $input;
     }
 }
