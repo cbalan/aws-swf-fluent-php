@@ -128,3 +128,4 @@ See examples folder for more details
 
 [install-packagist]: https://packagist.org/packages/aws-swf/fluent
 
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/ba9a4f82caacdb7b02ab4e56eea6b97f "githalytics.com")](http://githalytics.com/cbalan/aws-swf-fluent-php)
