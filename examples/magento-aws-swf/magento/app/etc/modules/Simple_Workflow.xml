@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Simple_Workflow>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Simple_Workflow>
+    </modules>
+</config>
