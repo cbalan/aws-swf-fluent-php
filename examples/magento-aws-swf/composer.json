@@ -1,0 +1,9 @@
+{
+    "require": {
+        "aws-swf/fluent": "dev-master"
+    },
+
+    "config": {
+        "vendor-dir": "magento/lib/composer-vendor/"
+    }
+}
