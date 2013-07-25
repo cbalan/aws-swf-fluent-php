@@ -1,6 +1,6 @@
 # Magento aws-swf simple practical example
 
-## Running three steps workflow example
+## Running this example
  1. Install [Composer][] unless is already installed: `curl -sS https://getcomposer.org/installer | php`
  1. Install dependencies. Under current folder execute: `php composer.phar install`
  1. Copy magento folder on top of your magento installation
@@ -12,3 +12,5 @@
  1. Go to AWS console a look at simple-domain workflow executions
 
 [composer]: http://getcomposer.org
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/ba9a4f82caacdb7b02ab4e56eea6b97f "githalytics.com")](http://githalytics.com/cbalan/aws-swf-fluent-php)
