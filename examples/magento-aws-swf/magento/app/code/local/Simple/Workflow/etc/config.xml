@@ -2,8 +2,6 @@
 <config>
     <modules>
         <Simple_Workflow>
-            <active>true</active>
-            <codePool>local</codePool>
             <version>0.1.1</version>
         </Simple_Workflow>
     </modules>

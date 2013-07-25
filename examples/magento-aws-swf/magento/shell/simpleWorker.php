@@ -15,7 +15,7 @@ class Mage_Shell_SimpleWorker extends Mage_Shell_Abstract {
         if ($workerIdentity) {
             $domain->setWorkerIdentity($workerIdentity);
         }
-        $domain->pollForDecisionTask();
+        $domain->pollForActivityTask();
     }
 }
 
