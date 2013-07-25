@@ -5,7 +5,7 @@ require_once __DIR__ . '/abstract.php';
 /**
  * Class Mage_Shell_SimpleDecision
  */
-class Mage_Shell_SimpleDecision extends Mage_Shell_Abstract {
+class Mage_Shell_SimpleDecider extends Mage_Shell_Abstract {
     /**
      *
      */
@@ -19,5 +19,5 @@ class Mage_Shell_SimpleDecision extends Mage_Shell_Abstract {
     }
 }
 
-$shell = new Mage_Shell_SimpleDecision();
+$shell = new Mage_Shell_SimpleDecider();
 $shell->run();
