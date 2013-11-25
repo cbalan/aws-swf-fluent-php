@@ -1,6 +1,6 @@
 # aws-swf-fluent-php
 
-Glue code around aws-sdk-php to allow fluent workflows definition.
+Glue code around aws-sdk-php simple workflow api(Aws\Swf) to allow fluent workflows definition.
 Feedback is welcome.
 
 ## Features
@@ -12,10 +12,14 @@ Feedback is welcome.
  * Timer support
  * Signal support
  * Activity/workflow timeouts support
-
  * ContinueAsNew workflow support
  * Workflow/activity cancelation support
  * Improved domain/workflow/activity registration
+
+## AWS Simple workflow documentation:
+ * http://aws.amazon.com/swf/
+ * http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-welcome.html
+ * http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-workflow-exec-lifecycle.html
 
 ## Getting Started
  1. Sign up for AWS - http://docs.aws.amazon.com/aws-sdk-php-2/guide/latest/awssignup.html
