@@ -90,13 +90,13 @@ class DecisionHint {
         if ($event) {
             switch ($event['eventType']) {
                 case \Aws\Swf\Enum\EventType::CHILD_WORKFLOW_EXECUTION_COMPLETED:
-                    $result = $event['childWorkflowExecutionCompletedEventAttributes']['result'];
+                    $result = array_key_exists('result', $event['childWorkflowExecutionCompletedEventAttributes']) ? $event['childWorkflowExecutionCompletedEventAttributes']['result'] : null;
                     break;
                 case \Aws\Swf\Enum\EventType::ACTIVITY_TASK_COMPLETED:
-                    $result = $event['activityTaskCompletedEventAttributes']['result'];
+                    $result = array_key_exists('result', $event['activityTaskCompletedEventAttributes']) ? $event['activityTaskCompletedEventAttributes']['result'] : null;
                     break;
                 case \Aws\Swf\Enum\EventType::WORKFLOW_EXECUTION_STARTED:
-                    $result = $event['workflowExecutionStartedEventAttributes']['input'];
+                    $result = array_key_exists('input', $event['workflowExecutionStartedEventAttributes']) ? $event['workflowExecutionStartedEventAttributes']['input'] : null;
                     break;
             }
         }
