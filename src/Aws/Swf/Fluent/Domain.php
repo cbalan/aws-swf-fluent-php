@@ -1,6 +1,7 @@
 <?php
 
 namespace Aws\Swf\Fluent;
+//include '/promise/'
 
 /**
  * Class Domain
@@ -89,17 +90,20 @@ class Domain {
     }
 
     /**
-     *
+     *	
      */
     protected function registerDomain() {
+    	
         $isDomainRegistered = true;
-        try {
-            $this->getSwfClient()->describeDomain(array('name' => $this->getDomainName()));
-        }
-        catch (Aws\Swf\Exception\UnknownResourceException $e) {
-            $isDomainRegistered = false;
-        }
-
+       	$client = $this->getSwfClient();
+       	$domains = $client->listDomains(array("registrationStatus" => "REGISTERED"));
+       	if(!Domain::recursive_array_search($this->getDomainName(), $domains)){
+       		$isDomainRegistered = false;
+       		echo 'Creating Domain '.$this->getDomainName().PHP_EOL;
+       	} else{
+       		echo 'Skipping Domain Registration. Domain Already Exists '.$this->getDomainName().PHP_EOL;
+       	}
+   
         if (!$isDomainRegistered) {
             $this->getSwfClient()->registerDomain(array(
                 'name' => $this->getDomainName(),
@@ -107,6 +111,16 @@ class Domain {
             ));
         }
     }
+    
+    public static function recursive_array_search($needle,$haystack) {
+		foreach($haystack as $key=>$value) {
+			$current_key=$key;
+			if($needle===$value OR (is_array($value) && Domain::recursive_array_search($needle,$value) !== false)) {
+				return $current_key;
+			}
+		}
+		return false;
+	}
 
     /**
      *
